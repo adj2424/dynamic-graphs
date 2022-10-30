@@ -1,28 +1,23 @@
-import './App.css';
-import { Graph } from './graph';
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import { ArgumentAxis, ValueAxis, Chart, BarSeries } from '@devexpress/dx-react-chart-material-ui';
-
-function App() {
-  const data = [
-    { argument: 'Monday', value: 30 },
-    { argument: 'Tuesday', value: 20 },
-    { argument: 'Wednesday', value: 10 },
-    { argument: 'Thursday', value: 50 },
-    { argument: 'Friday', value: 60 }
-  ];
+import React, { useState } from 'react';
+import Graph from './Graph';
+import Inputs from './Inputs';
+const App = () => {
+  const init = {
+    title: 'hi',
+    data: [
+      { year: '1950', population: 2.525 },
+      { year: '1960', population: 3.018 },
+      { year: '19601', population: 31 }
+    ]
+  };
+  const [json, setJson] = useState(init);
+  //const update = () => {};
   return (
     <div>
-      <Paper>
-        <Chart data={data}>
-          <ArgumentAxis />
-          <ValueAxis />
-          <BarSeries valueField="value" argumentField="argument" />
-        </Chart>
-      </Paper>
+      <Graph json={json}></Graph>
+      <Inputs json={json} setJson={setJson}></Inputs>
     </div>
   );
-}
+};
 
 export default App;
