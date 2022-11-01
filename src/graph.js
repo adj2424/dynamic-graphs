@@ -1,24 +1,21 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 const Graph = (props) => {
+  //sets graph title
   const title = props.json.title;
-  var data = props.json.data;
+  let data = props.json.data;
   let ref = useRef(null);
 
   const margin = 100;
+  //gets key names for x and y axis
+  const key1 = Object.keys(data[0])[0];
+  const key2 = Object.keys(data[0])[1]; //population
 
   useEffect(() => {
+    // init svg with height and width
     d3.select('g').remove();
     let svg = d3.select(ref.current);
     let g = svg.append('g').attr('transform', 'translate(' + 50 + ',' + 50 + ')');
@@ -32,14 +29,15 @@ const Graph = (props) => {
       .style('font-size', '20px')
       .text(title);
 
+    // defines x scale
     let xScale = d3
       .scaleBand()
       .range([0, w])
       .padding(0.2)
-      .domain(data.map((d) => d.year));
+      .domain(data.map((d) => d[key1]));
 
     // defines y scale
-    let yMax = Math.ceil(Math.max(...data.map((d) => d.population)) * 1.1);
+    let yMax = Math.ceil(Math.max(...data.map((d) => d[key2])) * 1.1);
     let yScale = d3.scaleLinear().range([h, 0]).domain([0, yMax]);
 
     //x axis properties
@@ -57,27 +55,23 @@ const Graph = (props) => {
       .append('rect')
       .style('fill', '#2296F3')
       .attr('class', 'bar')
-      .attr('x', (d) => xScale(d.year))
-      .attr('y', (d) => yScale(d.population))
+      .attr('x', (d) => xScale(d[key1]))
+      .attr('y', (d) => yScale(d[key2]))
       .attr('width', xScale.bandwidth())
-      .attr('height', (d) => h - yScale(d.population));
+      .attr('height', (d) => h - yScale(d[key2]));
 
     g.exit().remove();
   });
-  const columns = [
+  // header info for table
+  const header = [
     {
-      field: 'year',
-      headerName: 'Year',
+      field: key1,
+      headerName: key1,
       width: 150
     },
     {
-      field: 'population',
-      headerName: 'Population',
-      width: 150
-    },
-    {
-      field: 'id',
-      headerName: 'id',
+      field: key2,
+      headerName: key2,
       width: 150
     }
   ];
@@ -86,9 +80,9 @@ const Graph = (props) => {
     return (row['id'] = i);
   });
 
-  const displayItem = (item) => {
+  //gets array of selected based on id
+  const select = (item) => {
     props.setSelected(item);
-    //console.log(item);
   };
 
   return (
@@ -97,38 +91,15 @@ const Graph = (props) => {
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
           rows={data}
-          columns={columns}
+          columns={header}
           pageSize={5}
           rowsPerPageOptions={[5]}
           checkboxSelection
-          onSelectionModelChange={(item) => displayItem(item)}
+          onSelectionModelChange={(item) => select(item)}
         />
       </Box>
     </div>
   );
 };
 
-/*
-<TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Year</TableCell>
-              <TableCell align="right">Population</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => (
-              <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox color="primary" />
-                </TableCell>
-                <TableCell component="th">{row.year}</TableCell>
-                <TableCell align="right">{row.population}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-*/
 export default Graph;
