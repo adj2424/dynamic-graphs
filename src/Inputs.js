@@ -7,7 +7,8 @@ const Inputs = (props) => {
   const appendData = () => {
     const y = document.getElementById('year').value;
     const p = parseFloat(document.getElementById('population').value);
-    const data = props.json.data;
+    //deep clone because datagride freezes array
+    let data = JSON.parse(JSON.stringify(props.json.data));
     data.push({
       year: y,
       population: p
@@ -26,7 +27,7 @@ const Inputs = (props) => {
         <TextField id="year" label="Year" variant="outlined" />
         <TextField id="population" label="Population" variant="outlined" />
         <Button onClick={appendData} variant="contained">
-          Contained
+          Append
         </Button>
       </Box>
     </div>
