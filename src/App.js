@@ -1,5 +1,8 @@
+/**
+ * Project 1
+ */
 import React, { useState } from 'react';
-import Graph from './Graph';
+import BarChart from './BarChart';
 import Inputs from './Inputs';
 import MenuBar from './MenuBar';
 const App = () => {
@@ -25,7 +28,7 @@ const App = () => {
   return (
     <div>
       <MenuBar json={json} setJson={setJson} selected={selected} copied={copied} setCopied={setCopied}></MenuBar>
-      <Graph json={json} setSelected={setSelected}></Graph>
+      <BarChart json={json} setSelected={setSelected} min={null} max={null} step={null}></BarChart>
       <Inputs json={json} setJson={setJson}></Inputs>
     </div>
   );

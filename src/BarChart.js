@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 
-const Graph = (props) => {
+const BarChart = (props) => {
   //sets graph title
   const title = props.json.title;
   let data = props.json.data;
@@ -37,8 +37,18 @@ const Graph = (props) => {
       .domain(data.map((d) => d[key1]));
 
     // defines y scale
-    let yMax = Math.ceil(Math.max(...data.map((d) => d[key2])) * 1.1);
-    let yScale = d3.scaleLinear().range([h, 0]).domain([0, yMax]);
+    let yMin = props.min === null ? 0 : props.min;
+    let yMax = props.max;
+    // checks for null
+    if (yMax === null) {
+      yMax = Math.ceil(Math.max(...data.map((d) => d[key2])) * 1.1);
+    }
+    // checks if yMin and yMax is valid
+    if (yMin > yMax) {
+      yMin = 0;
+      yMax = Math.ceil(Math.max(...data.map((d) => d[key2])) * 1.1);
+    }
+    let yScale = d3.scaleLinear().range([h, 0]).domain([yMin, yMax]);
 
     //x axis properties
     g.append('g')
@@ -46,7 +56,16 @@ const Graph = (props) => {
       .call(d3.axisBottom(xScale));
 
     //y axis properties
-    g.append('g').call(d3.axisLeft(yScale).ticks(20));
+    let yStep = props.step === null ? 1 : props.step;
+    let tickValues = [];
+
+    //creates all tick values in array
+    let i = yMin;
+    while (i <= yMax) {
+      tickValues = [...tickValues, i];
+      i += yStep;
+    }
+    g.append('g').call(d3.axisLeft(yScale).tickValues(tickValues).tickFormat(d3.format(',.1f')));
 
     //iterates through array and creates bar graph based on data
     g.selectAll('rect')
@@ -102,4 +121,4 @@ const Graph = (props) => {
   );
 };
 
-export default Graph;
+export default BarChart;
