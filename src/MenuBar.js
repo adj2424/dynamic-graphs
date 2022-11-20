@@ -5,15 +5,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
+import PropTypes from 'prop-types';
 
-const MenuBar = (props) => {
+const MenuBar = props => {
   // cut function
   const cut = () => {
     //console.log(props.selected);
     let data = JSON.parse(JSON.stringify(props.json.data));
     let kept = [];
     let removed = [];
-    data.forEach((elem) => {
+    data.forEach(elem => {
       if (!props.selected.includes(elem.id)) {
         //selected elem
         kept.push(elem);
@@ -35,7 +36,7 @@ const MenuBar = (props) => {
   const copy = () => {
     let data = JSON.parse(JSON.stringify(props.json.data));
     let copied = [];
-    data.forEach((elem) => {
+    data.forEach(elem => {
       // selects all copied elems
       if (props.selected.includes(elem.id)) {
         copied.push(elem);
@@ -56,6 +57,13 @@ const MenuBar = (props) => {
         data: data
       });
     }
+  };
+  MenuBar.propTypes = {
+    json: PropTypes.object,
+    selected: PropTypes.array,
+    setJson: PropTypes.func,
+    setCopied: PropTypes.func,
+    copied: PropTypes.array
   };
 
   return (

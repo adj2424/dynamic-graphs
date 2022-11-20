@@ -2,8 +2,9 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
 
-const Inputs = (props) => {
+const Inputs = props => {
   //gets data
   let data = JSON.parse(JSON.stringify(props.json.data));
   const key1 = Object.keys(data[0])[0];
@@ -23,6 +24,10 @@ const Inputs = (props) => {
       ...props.json,
       data: data
     });
+  };
+  Inputs.propTypes = {
+    json: PropTypes.object,
+    setJson: PropTypes.func
   };
 
   return (

@@ -28,7 +28,7 @@ const App = () => {
   return (
     <div>
       <MenuBar json={json} setJson={setJson} selected={selected} copied={copied} setCopied={setCopied}></MenuBar>
-      <BarChart json={json} setSelected={setSelected} min={null} max={null} step={null}></BarChart>
+      <BarChart json={json} setSelected={setSelected} selected={selected} min={null} max={null} step={null}></BarChart>
       <Inputs json={json} setJson={setJson}></Inputs>
     </div>
   );
