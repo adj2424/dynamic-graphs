@@ -10,12 +10,11 @@ import PropTypes from 'prop-types';
 const MenuBar = props => {
   // cut function
   const cut = () => {
-    //console.log(props.selected);
     let data = JSON.parse(JSON.stringify(props.json.data));
     let kept = [];
     let removed = [];
     data.forEach(elem => {
-      if (!props.selected.includes(elem.id)) {
+      if (!props.selection.includes(elem.id)) {
         //selected elem
         kept.push(elem);
       } else {
@@ -37,8 +36,8 @@ const MenuBar = props => {
     let data = JSON.parse(JSON.stringify(props.json.data));
     let copied = [];
     data.forEach(elem => {
-      // selects all copied elems
-      if (props.selected.includes(elem.id)) {
+      // selects all copied elem
+      if (props.selection.includes(elem.id)) {
         copied.push(elem);
       }
     });
@@ -60,7 +59,7 @@ const MenuBar = props => {
   };
   MenuBar.propTypes = {
     json: PropTypes.object,
-    selected: PropTypes.array,
+    selection: PropTypes.array,
     setJson: PropTypes.func,
     setCopied: PropTypes.func,
     copied: PropTypes.array

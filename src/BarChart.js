@@ -98,7 +98,7 @@ const BarChart = props => {
     // sets color based on selection
     const selectColor = i => {
       // sets bar to red if selected
-      if (props.selected.includes(i)) {
+      if (props.selection.includes(i)) {
         return '#FF0000';
       }
       // default color
@@ -108,13 +108,13 @@ const BarChart = props => {
     // update selection state
     const colorSelected = i => {
       // deselects bar if already selected
-      if (props.selected.includes(i)) {
-        const newSelected = props.selected.filter(e => e !== i);
-        props.setSelected(newSelected);
+      if (props.selection.includes(i)) {
+        const newSelected = props.selection.filter(e => e !== i);
+        props.setSelection(newSelected);
       }
       // selects bar
       else {
-        props.setSelected(prevSelected => [...prevSelected, i]);
+        props.setSelection(prevSelected => [...prevSelected, i]);
       }
       // remove hover
       d3.select(`#toolTip${i}`).remove();
@@ -175,15 +175,15 @@ const BarChart = props => {
 
   //gets array of selected based on id
   const select = item => {
-    props.setSelected(item);
+    props.setSelection(item);
   };
   BarChart.propTypes = {
     json: PropTypes.object,
     min: PropTypes.number,
     max: PropTypes.number,
     step: PropTypes.number,
-    selected: PropTypes.array,
-    setSelected: PropTypes.func
+    selection: PropTypes.array,
+    setSelection: PropTypes.func
   };
 
   return (

@@ -22,13 +22,20 @@ const App = () => {
 
   //states
   const [json, setJson] = useState(init);
-  const [selected, setSelected] = useState([]);
+  const [selection, setSelection] = useState([]);
   const [copied, setCopied] = useState([]);
 
   return (
     <div>
-      <MenuBar json={json} setJson={setJson} selected={selected} copied={copied} setCopied={setCopied}></MenuBar>
-      <BarChart json={json} setSelected={setSelected} selected={selected} min={null} max={null} step={null}></BarChart>
+      <MenuBar json={json} setJson={setJson} selection={selection} copied={copied} setCopied={setCopied}></MenuBar>
+      <BarChart
+        json={json}
+        setSelection={setSelection}
+        selection={selection}
+        min={null}
+        max={null}
+        step={null}
+      ></BarChart>
       <Inputs json={json} setJson={setJson}></Inputs>
     </div>
   );
