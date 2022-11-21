@@ -95,6 +95,46 @@ const BarChart = props => {
       g.append('g').call(d3.axisLeft(yScale).tickValues(tickValues).tickFormat(d3.format(',.1f')));
     }
 
+    // sets color based on selection
+    const selectColor = i => {
+      // sets bar to red if selected
+      if (props.selected.includes(i)) {
+        return '#FF0000';
+      }
+      // default color
+      return '#2296F3';
+    };
+
+    // update selection state
+    const colorSelected = i => {
+      // deselects bar if already selected
+      if (props.selected.includes(i)) {
+        const newSelected = props.selected.filter(e => e !== i);
+        props.setSelected(newSelected);
+      }
+      // selects bar
+      else {
+        props.setSelected(prevSelected => [...prevSelected, i]);
+      }
+      // remove hover
+      d3.select(`#toolTip${i}`).remove();
+    };
+
+    //toolTip for hover
+    let toolTip = (s, d, i) => {
+      let t = d3
+        .select('body')
+        .append('text')
+        .attr('id', `toolTip${i}`)
+        .text(s)
+        .style('font-size', '12px')
+        .style('position', 'absolute')
+        .style('visibility', 'hidden')
+        .style('top', yScale(d[key2]) + 85 + 'px')
+        .style('left', xScale(d[key1]) + 50 + 'px');
+      return t;
+    };
+
     //iterates through array and creates bar graph based on data
     g.selectAll('rect')
       .data(data)
@@ -104,25 +144,13 @@ const BarChart = props => {
       .attr('y', d => yScale(d[key2]))
       .attr('width', xScale.bandwidth())
       .attr('height', d => h - yScale(d[key2]))
-      .style('fill', (d, i) => {
-        // sets bar to red if selected
-        if (props.selected.includes(i)) {
-          return '#FF0000';
-        }
-        // default color
-        return '#2296F3';
+      .style('fill', (d, i) => selectColor(i))
+      .on('click', (e, d) => colorSelected(d.id))
+      .on('mouseover', (e, d) => {
+        toolTip(`${key2}: ${d[key2]}`, d, d.id).style('visibility', 'visible');
       })
-      .on('click', (e, d) => {
-        const i = d.id;
-        // deselects bar if already selected
-        if (props.selected.includes(i)) {
-          const newSelected = props.selected.filter(e => e !== i);
-          props.setSelected(newSelected);
-        }
-        // selects bar
-        else {
-          props.setSelected(prevSelected => [...prevSelected, i]);
-        }
+      .on('mouseout', (e, d) => {
+        d3.select(`#toolTip${d.id}`).remove();
       });
     g.exit().remove();
   });
