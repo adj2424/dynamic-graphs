@@ -3,8 +3,10 @@
  */
 import React, { useState } from 'react';
 import BarChart from './BarChart';
+import ScatterPlot from './ScatterPlot';
 import Inputs from './Inputs';
 import MenuBar from './MenuBar';
+import Table from './Table';
 const App = () => {
   //init data for placeholder
   const init = {
@@ -28,14 +30,9 @@ const App = () => {
   return (
     <div>
       <MenuBar json={json} setJson={setJson} selection={selection} copied={copied} setCopied={setCopied}></MenuBar>
-      <BarChart
-        json={json}
-        setSelection={setSelection}
-        selection={selection}
-        min={null}
-        max={null}
-        step={null}
-      ></BarChart>
+      <BarChart json={json} setSelection={setSelection} selection={selection} min={null} max={null} step={null} />
+      <ScatterPlot json={json} setSelection={setSelection} selection={selection} min={null} max={null} step={null} />
+      <Table json={json} setSelection={setSelection} selection={selection} />
       <Inputs json={json} setJson={setJson}></Inputs>
     </div>
   );

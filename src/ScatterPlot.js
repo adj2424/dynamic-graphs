@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import './BarChart.css';
 import PropTypes from 'prop-types';
 
-const BarChart = props => {
+const ScatterPlot = props => {
   //sets graph title
   const title = props.json.title;
   let data = props.json.data;
@@ -16,12 +16,12 @@ const BarChart = props => {
 
   useEffect(() => {
     //clears during render
-    d3.select('#barChart').remove();
+    d3.select('#scatterPlot').remove();
     // init svg with height and width
     let svg = d3.select(ref.current);
     let g = svg
       .append('g')
-      .attr('id', 'barChart')
+      .attr('id', 'scatterPlot')
       .attr('transform', 'translate(' + 50 + ',' + 50 + ')');
     let w = svg.attr('width') - margin;
     let h = svg.attr('height') - margin;
@@ -118,7 +118,7 @@ const BarChart = props => {
         props.setSelection(prevSelected => [...prevSelected, i]);
       }
       // remove hover
-      d3.select(`#toolTip${i}`).remove();
+      d3.select(`#scatterPlotToolTip${i}`).remove();
     };
 
     //toolTip for hover
@@ -126,42 +126,35 @@ const BarChart = props => {
       let t = d3
         .select('body')
         .append('text')
-        .attr('id', `toolTip${i}`)
+        .attr('id', `scatterPlotToolTip${i}`)
         .text(s)
         .style('font-size', '12px')
         .style('position', 'absolute')
         .style('visibility', 'hidden')
-        .style('top', yScale(d[key2]) + 85 + 'px')
+        .style('top', yScale(d[key2]) + h + 185 + 'px')
         .style('left', xScale(d[key1]) + 40 + 'px');
       return t;
     };
 
-    //iterates through array and creates bar graph based on data
-    g.selectAll('rect')
+    //iterates through array and creates scatter plot based on data
+    g.selectAll('dot')
       .data(data)
       .enter()
-      .append('rect')
-      .attr('x', d => xScale(d[key1]))
-      .attr('y', d => yScale(d[key2]))
-      .attr('width', xScale.bandwidth())
-      .attr('height', d => h - yScale(d[key2]))
+      .append('circle')
+      .attr('cx', d => xScale(d[key1]) + 25)
+      .attr('cy', d => yScale(d[key2]))
+      .attr('r', 8)
       .style('fill', (d, i) => selectColor(i))
       .on('click', (e, d) => colorSelected(d.id))
       .on('mouseover', (e, d) => {
         toolTip(`${key2}: ${d[key2]}`, d, d.id).style('visibility', 'visible');
       })
       .on('mouseout', (e, d) => {
-        d3.select(`#toolTip${d.id}`).remove();
+        d3.select(`#scatterPlotToolTip${d.id}`).remove();
       });
-    g.exit().remove();
   });
 
-  // adds id to data
-  data.map((row, i) => {
-    return (row['id'] = i);
-  });
-
-  BarChart.propTypes = {
+  ScatterPlot.propTypes = {
     json: PropTypes.object,
     min: PropTypes.number,
     max: PropTypes.number,
@@ -169,7 +162,6 @@ const BarChart = props => {
     selection: PropTypes.array,
     setSelection: PropTypes.func
   };
-
   return (
     <div>
       <svg ref={ref} height="500" width="600"></svg>
@@ -177,4 +169,4 @@ const BarChart = props => {
   );
 };
 
-export default BarChart;
+export default ScatterPlot;
