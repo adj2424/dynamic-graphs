@@ -8,6 +8,54 @@ import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 
 const MenuBar = props => {
+  // clears data
+  const emptyData = () => {
+    //const url = `http://localhost:3001/data/update`;
+    const empty = {
+      title: '',
+      data: [{ '.': '', _: '' }]
+    };
+    props.setJson(empty);
+    /*
+    fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(empty)
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+    */
+  };
+
+  // saves data to mongodb
+  const save = () => {
+    const url = `http://localhost:3001/data/update`;
+    fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(props.json)
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  };
+
+  // helper function
+  const loadHelper = e => {
+    var jsonData = JSON.parse(e.target.result);
+    props.setJson(jsonData);
+  };
+
+  // parses and reads json
+  const load = e => {
+    var reader = new FileReader();
+    reader.onload = loadHelper;
+    reader.readAsText(e.target.files[0]);
+  };
+
   // cut function
   const cut = () => {
     let data = JSON.parse(JSON.stringify(props.json.data));
@@ -47,7 +95,6 @@ const MenuBar = props => {
   const paste = () => {
     // checks array is not empty
     if (!props.copied.length < 1) {
-      console.log('sus');
       let data = JSON.parse(JSON.stringify(props.json.data));
       // appends data together
       data = [...data, ...props.copied];
@@ -73,6 +120,16 @@ const MenuBar = props => {
             <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
               <MenuIcon />
             </IconButton>
+            <Button color="inherit" onClick={emptyData}>
+              New
+            </Button>
+            <Button color="inherit" onClick={save}>
+              Save
+            </Button>
+            <Button color="inherit" component="label">
+              Load
+              <input type="file" hidden onChange={e => load(e)} />
+            </Button>
             <Button color="inherit" onClick={cut}>
               Cut
             </Button>

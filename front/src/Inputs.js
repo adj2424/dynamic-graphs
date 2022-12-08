@@ -10,8 +10,8 @@ const Inputs = props => {
   const key1 = Object.keys(data[0])[0];
   const key2 = Object.keys(data[0])[1]; //population
   const appendData = () => {
-    const y = document.getElementById('year').value;
-    const p = parseFloat(document.getElementById('population').value);
+    const y = document.getElementById(key1).value;
+    const p = parseFloat(document.getElementById(key2).value);
     //deep clone because datagrid freezes array
     let data = JSON.parse(JSON.stringify(props.json.data));
     let obj = {};

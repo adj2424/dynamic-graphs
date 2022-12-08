@@ -1,11 +1,12 @@
 /**
-scatter plot
+pie Chart
 css component
 */
-#svg {
+.pieChart {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size: calc(10px + 2vmin);
   margin-left: 20px;
   margin-bottom: 20px;
 }

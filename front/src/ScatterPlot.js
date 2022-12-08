@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import './BarChart.css';
+import './ScatterPlot.css';
 import PropTypes from 'prop-types';
 
 const ScatterPlot = props => {

@@ -40,6 +40,7 @@ const Table = props => {
         pageSize={5}
         rowsPerPageOptions={[5]}
         checkboxSelection
+        selectionModel={props.selection}
         onSelectionModelChange={item => select(item)}
       />
     </Box>
